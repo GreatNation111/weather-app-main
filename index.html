@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | Weather app</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;500;600;700&family=Bricolage+Grotesque:wght@700&display=swap" rel="stylesheet">
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="logo"><img src="assets/images/logo.svg" alt="weather svg"></div>
+    <div class="units">
+      <label for="unit-select" class="sr-only">Units</label>
+      <select id="unit-select">
+        <option value="metric">Metric (°C, km/h, mm)</option>
+        <option value="imperial">Imperial (°F, mph, in)</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <!-- Title -->
+    <h1 class="main-title">How's the sky looking today?</h1>
+
+    <!-- Search Bar -->
+    <form class="search-bar" id="search-form">
+      <input 
+        type="text" 
+        id="search-input" 
+        img="search-icon"
+        placeholder="Search for a place..."
+        aria-label="Search for a city">
+      <button type="submit" id="search-btn">Search</button>
+    </form>
+
+    <!-- Current Weather -->
+<div class="weather-container">
+   
+  <div class="current-weather-container">
+
+    <section class="current-weather">
+
+      <div class="location-date">
+        <h2 id="city">Berlin, Germany</h2>
+        <p id="date">Tuesday, Aug 5, 2025</p>
+       </div>
+
+      <div class="weather-main">
+        <span><img  id="weather-icon" src="assets/images/icon-sunny.webp" alt="icon-sunny"></span>
+        <h3 id="temperature">20°</h3>
+      </div>
+      
+    </section>
+
+     <div class="details">
+        <div>Feels Like <span id="feels-like">18°</span></div>
+        <div>Humidity <span id="humidity">46%</span></div>
+        <div>Wind <span id="wind">14 mph</span></div>
+        <div>Precipitation <span id="precipitation">0 in</span></div>
+      </div>
+
+    <!-- Daily Forecast -->
+  <section class="daily-forecast">
+
+      <h3>Daily forecast</h3>
+      
+  <div class="forecast-cards" id="daily-forecast">
+
+  <div class="forecast-card">
+    <p class="day">Tue</p>
+    <img src="assets/images/icon-rain.webp" alt="rain">
+    <p class="temp">20°  14°</p>
+  </div>
+
+  <div class="forecast-card">
+    <p class="day">Wed</p>
+    <img src="assets/images/icon-drizzle.webp" alt="icon-drizzle">
+    <p class="temp">21° <p> 15°</p>
+  </div>
+
+  <div class="forecast-card">
+          <p class="day">Thu</p>
+          <img src="assets/images/icon-sunny.webp" alt="sunny">
+          <p class="temp">17° / 11°</p>
+  </div>
+       
+   <div class="forecast-card">
+          <p class="day">Fri</p>
+          <img src="assets/images/icon-partly-cloudy.webp" alt="cloudy">
+          <p class="temp">21° / 14°</p>
+   </div>
+
+   <div class="forecast-card">
+          <p class="day">Sat</p>
+          <img src="assets/images/icon-storm.webp" alt="Stormy">
+          <p class="temp">24° / 16°</p>
+    </div>
+
+    <div class="forecast-card">
+          <p class="day">Sun</p>
+          <img src="assets/images/icon-snow.webp" alt="snow">
+          <p class="temp">20°   12°</p>
+        </div>
+
+    <div class="forecast-card">
+          <p class="day">Mon</p>
+          <img src="assets/images/icon-fog.webp" alt="fog">
+          <p class="temp">18° / 10°</p>
+        </div>
+  </div>
+
+    </section>
+  
+</div>
+    <!-- Hourly Forecast -->
+     
+ <section class="hourly-forecast">
+
+   <div class="hourly-forecast-cards" id="hourly-forecast">
+   <div class="forecast-header">
+
+        <h3>Hourly forecast</h3>
+
+        <div class="custom-select"> 
+          <select id="day-select">
+            <option value="tue">Tuesday</option>
+            <option value="wed">Wed</option>
+            <option value="thu">Thu</option>
+          </select>
+        </div>
+      </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-overcast.webp" alt="overcast">
+          <p class="hour">3 PM</p>
+          </div>
+          <div>
+          <p class="temp">20°</p>
+          </div>
+        </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-partly-cloudy.webp" alt="cloudy">
+          <p class="hour">4 PM</p>
+          </div>
+          <div>
+          <p class="temp">20°</p>
+          </div>
+        </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-sunny.webp" alt="Sunny">
+          <p class="hour">5 PM</p>
+          </div>
+          <div>
+          <p class="temp">20°</p>
+          </div>
+        </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-overcast.webp" alt="overcast">
+          <p class="hour">6 PM</p>
+          </div>
+          <div>
+          <p class="temp">19°</p>
+          </div>
+        </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-snow.webp" alt="Snow">
+          <p class="hour">7 PM</p>
+          </div>
+          <div>
+          <p class="temp">18°</p>
+          </div>
+        </div>
+
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-fog.webp" alt="foggy">
+          <p class="hour">8 PM</p>
+          </div>
+          <div>
+          <p class="temp">18°</p>
+          </div>
+        </div>
+        
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-snow.webp" alt="Snow">
+          <p class="hour">9 PM</p>
+          </div>
+          <div>
+          <p class="temp">17°</p>
+          </div>
+        </div>
+        
+        <div class="forecast-card">
+          <div class="forecast-data">
+          <img src="assets/images/icon-overcast.webp" alt="overcast">
+          <p class="hour">10 PM</p>
+          </div>
+          <div>
+          <p class="temp">17°</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+</div>
+
+  </main>
+
+  <footer>
+    <div class="attribution">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>. 
+      Coded by <a href="#">GreatNation111</a>.
+    </div>
+  </footer>
+<!-- 
+  <script src="script.js"></script> -->
+</body>
+</html>
