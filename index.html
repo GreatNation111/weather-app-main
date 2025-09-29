@@ -20,29 +20,107 @@
   <!-- Header -->
   <header class="header">
     <div class="logo"><img src="assets/images/logo.svg" alt="weather svg"></div>
-    <div class="units">
-      <label for="unit-select" class="sr-only">Units</label>
-      <select id="unit-select">
-        <option value="metric">Metric (°C, km/h, mm)</option>
-        <option value="imperial">Imperial (°F, mph, in)</option>
-      </select>
+ <div class="custom-dropdown" id="units-dropdown">
+  <div class="dropdown-trigger" id="dropdown-trigger">
+    <img src="assets/images/icon-units.svg" alt="units-icon">
+    <span>Units</span>
+   <img src="assets/images/icon-dropdown.svg" alt="dropdown-icon">
+  </div>
+  
+  <div class="dropdown-menu" id="dropdown-menu">
+    <!-- System Switch Button (No toggle switch) -->
+    <button class="system-switch-btn" id="system-switch-btn">
+      Switch to Imperial
+    </button>
+
+    <div class="dropdown-divider"></div>
+
+    <!-- Temperature Section -->
+    <div class="dropdown-section">Temperature</div>
+    <div class="dropdown-item" data-type="temperature" data-value="celsius">
+      <span class="option-label">Celsius (°C)</span>
+      <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
     </div>
+    <div class="dropdown-item" data-type="temperature" data-value="fahrenheit">
+      <span class="option-label">Fahrenheit (°F)</span>
+      <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <!-- Wind Speed Section -->
+    <div class="dropdown-section">Wind Speed</div>
+    <div class="dropdown-item" data-type="wind" data-value="kmh">
+      <span class="option-label">km/h</span>
+      <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
+    </div>
+    <div class="dropdown-item" data-type="wind" data-value="mph">
+      <span class="option-label">mph</span>
+      <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <!-- Precipitation Section -->
+    <div class="dropdown-section">Precipitation</div>
+    <div class="dropdown-item" data-type="precipitation" data-value="mm">
+      <span class="option-label">Millimeters (mm)</span>
+      <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
+    </div>
+    <div class="dropdown-item" data-type="precipitation" data-value="in">
+      <span class="option-label">Inches (in)</span>
+        <img  class="check-icon" src="assets/images/icon-checkmark.svg" alt="check-icon">
+    </div>
+  </div>
+</div>
   </header>
 
   <main>
     <!-- Title -->
     <h1 class="main-title">How's the sky looking today?</h1>
 
-    <!-- Search Bar -->
-    <form class="search-bar" id="search-form">
+    <!-- Search Bar with Dropdown -->
+<div class="search-container">
+  <form class="search-bar" id="search-form">
+    <div class="search-input-wrapper">
       <input 
         type="text" 
         id="search-input" 
-        img="search-icon"
         placeholder="Search for a place..."
-        aria-label="Search for a city">
-      <button type="submit" id="search-btn">Search</button>
-    </form>
+        aria-label="Search for a city"
+        autocomplete="off">
+    </div>
+    <button type="submit" id="search-btn">Search</button>
+  </form>
+
+  <!-- Search Suggestions Dropdown -->
+  <div class="search-dropdown" id="search-dropdown">
+    <div class="dropdown-item">
+      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+      <span class="city-name">Berlin, Germany</span>
+    </div>
+    <div class="dropdown-item">
+      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+      <span class="city-name">Paris, France</span>
+    </div>
+    <div class="dropdown-item">
+      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+      <span class="city-name">London, United Kingdom</span>
+    </div>
+    <div class="dropdown-item">
+      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+      <span class="city-name">Madrid, Spain</span>
+    </div>
+  </div>
+</div>
 
     <!-- Current Weather -->
 <div class="weather-container">
@@ -66,8 +144,8 @@
      <div class="details">
         <div>Feels Like <span id="feels-like">18°</span></div>
         <div>Humidity <span id="humidity">46%</span></div>
-        <div>Wind <span id="wind">14 mph</span></div>
-        <div>Precipitation <span id="precipitation">0 in</span></div>
+        <div>Wind <span id="wind">14 km/h</span></div>
+        <div>Precipitation <span id="precipitation">0 mm</span></div>
       </div>
 
     <!-- Daily Forecast -->
@@ -80,46 +158,66 @@
   <div class="forecast-card">
     <p class="day">Tue</p>
     <img src="assets/images/icon-rain.webp" alt="rain">
-    <p class="temp">20°  14°</p>
+    <div class="temperature">
+      <span class="high">20°</span>
+      <span class="low">14°</span>
+    </div>
   </div>
 
   <div class="forecast-card">
     <p class="day">Wed</p>
     <img src="assets/images/icon-drizzle.webp" alt="icon-drizzle">
-    <p class="temp">21° <p> 15°</p>
+    <div class="temperature">
+      <span class="high">21°</span>
+      <span class="low">15°</span>
+    </div>
   </div>
 
   <div class="forecast-card">
           <p class="day">Thu</p>
           <img src="assets/images/icon-sunny.webp" alt="sunny">
-          <p class="temp">17° / 11°</p>
+          <div class="temperature">
+      <span class="high">24°</span>
+      <span class="low">14°</span>
+    </div>
   </div>
        
    <div class="forecast-card">
           <p class="day">Fri</p>
           <img src="assets/images/icon-partly-cloudy.webp" alt="cloudy">
-          <p class="temp">21° / 14°</p>
+          <div class="temperature">
+      <span class="high">25°</span>
+      <span class="low">13°</span>
+    </div>
    </div>
 
    <div class="forecast-card">
           <p class="day">Sat</p>
           <img src="assets/images/icon-storm.webp" alt="Stormy">
-          <p class="temp">24° / 16°</p>
+          <div class="temperature">
+      <span class="high">21°</span>
+      <span class="low">15°</span>
+    </div>
     </div>
 
     <div class="forecast-card">
           <p class="day">Sun</p>
           <img src="assets/images/icon-snow.webp" alt="snow">
-          <p class="temp">20°   12°</p>
+         <div class="temperature">
+      <span class="high">25°</span>
+      <span class="low">16°</span>
+    </div>
         </div>
 
     <div class="forecast-card">
           <p class="day">Mon</p>
           <img src="assets/images/icon-fog.webp" alt="fog">
-          <p class="temp">18° / 10°</p>
+          <div class="temperature">
+      <span class="high">24°</span>
+      <span class="low">15°</span>
+    </div>
         </div>
   </div>
-
     </section>
   
 </div>
@@ -128,19 +226,49 @@
  <section class="hourly-forecast">
 
    <div class="hourly-forecast-cards" id="hourly-forecast">
-   <div class="forecast-header">
+  <!-- Hourly Forecast Header with Day Selector -->
+<div class="forecast-header">
+  <h3>Hourly forecast</h3>
+  
+  <div class="day-selector-dropdown" id="day-selector">
 
-        <h3>Hourly forecast</h3>
-
-        <div class="custom-select"> 
-          <select id="day-select">
-            <option value="tue">Tuesday</option>
-            <option value="wed">Wed</option>
-            <option value="thu">Thu</option>
-          </select>
-        </div>
+    <div class="dropdown-trigger" id="day-trigger">
+      <span class="active-day">Monday</span>
+        <img src="assets/images/icon-dropdown.svg" alt="dropdown-icon">
+    </div>
+    
+    <div class="dropdown-menu" id="day-menu">
+      
+      <div class="dropdown-item" data-day="monday">
+        <span class="day-label">Monday</span>
       </div>
 
+      <div class="dropdown-item" data-day="tuesday">
+        <span class="day-label">Tuesday</span>
+      </div>
+
+      <div class="dropdown-item" data-day="wednesday">
+        <span class="day-label">Wednesday</span>
+      </div>
+
+      <div class="dropdown-item" data-day="thursday">
+        <span class="day-label">Thursday</span>
+      </div>
+      
+      <div class="dropdown-item" data-day="friday">
+        <span class="day-label">Friday</span>
+      </div>
+
+      <div class="dropdown-item" data-day="saturday">
+        <span class="day-label">Saturday</span>
+      </div>
+
+      <div class="dropdown-item" data-day="sunday">
+        <span class="day-label">Sunday</span>
+      </div>
+    </div>
+  </div>
+</div>
         <div class="forecast-card">
           <div class="forecast-data">
           <img src="assets/images/icon-overcast.webp" alt="overcast">
@@ -233,7 +361,7 @@
       Coded by <a href="#">GreatNation111</a>.
     </div>
   </footer>
-<!-- 
-  <script src="script.js"></script> -->
+
+  <script src="script.js"></script>
 </body>
 </html>
