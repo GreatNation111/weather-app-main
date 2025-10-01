@@ -79,7 +79,7 @@
     <!-- Title -->
     <h1 class="main-title">How's the sky looking today?</h1>
 
-    <!-- Search Bar with Dropdown -->
+    <!-- Search Container -->
 <div class="search-container">
   <form class="search-bar" id="search-form">
     <div class="search-input-wrapper">
@@ -95,29 +95,14 @@
 
   <!-- Search Suggestions Dropdown -->
   <div class="search-dropdown" id="search-dropdown">
-    <div class="dropdown-item">
-      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-      <span class="city-name">Berlin, Germany</span>
-    </div>
-    <div class="dropdown-item">
-      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-      <span class="city-name">Paris, France</span>
-    </div>
-    <div class="dropdown-item">
-      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-      <span class="city-name">London, United Kingdom</span>
-    </div>
-    <div class="dropdown-item">
-      <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-      <span class="city-name">Madrid, Spain</span>
+    <!-- Will be populated by JavaScript -->
+  </div>
+
+  <!-- Search in Progress State (Under input) -->
+  <div class="search-progress-state" id="search-progress-state">
+    <div class="progress-content">
+      <img src="assets/images/icon-loading.svg" alt="icon-loading">
+      <span class="progress-text">Search in progress</span>
     </div>
   </div>
 </div>
@@ -350,7 +335,32 @@
         </div>
       </div>
     </section>
+</div>
 
+
+  <!-- No Results State (Replaces weather content) -->
+  <div class="no-results-state" id="no-results-state">
+    <div class="no-results-content">
+      <div class="no-results-icon">
+      </div>
+      <h2 class="no-results-title">No search result found!</h2>
+    </div>
+  </div>
+
+  
+<!-- API Error State (Full Page) -->
+<div class="error-state" id="error-state">
+  <div class="error-content">
+    <div class="error-icon">
+      <img class="error-icon" src="assets/images/icon-error.svg" alt="icon-error">
+    </div>
+    <h2 class="error-title">Something went wrong</h2>
+    <p class="error-message">We couldn't connect to the server (API error). Please try again in a few moments.</p>
+    <div class="error-actions">
+      <button class="retry-btn primary" id="error-retry-btn">
+        <img src="assets/images/icon-retry.svg" alt="icon-retry">Retry</button>
+    </div>
+  </div>
 </div>
 
   </main>

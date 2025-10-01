@@ -493,13 +493,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Search Dropdown Functionality
+// Search Functionality with Exact UI States
 class SearchDropdown {
     constructor() {
         this.searchInput = document.getElementById('search-input');
         this.searchDropdown = document.getElementById('search-dropdown');
         this.searchForm = document.getElementById('search-form');
-        this.dropdownItems = this.searchDropdown.querySelectorAll('.dropdown-item');
+        this.searchBtn = document.getElementById('search-btn');
+        
+        // State containers
+        this.searchProgress = document.getElementById('search-progress-state');
+        this.noResultsState = document.getElementById('no-results-state');
+        this.errorState = document.getElementById('error-state');
+        
+        // Buttons
+        this.noResultsRetryBtn = document.getElementById('no-results-retry-btn');
+        this.errorRetryBtn = document.getElementById('error-retry-btn');
+        this.errorCancelBtn = document.getElementById('error-cancel-btn');
         
         this.init();
     }
@@ -521,11 +531,21 @@ class SearchDropdown {
             this.handleSearch();
         });
         
-        // Dropdown item selection
-        this.dropdownItems.forEach(item => {
-            item.addEventListener('click', () => {
-                this.selectCity(item);
-            });
+        // Retry buttons
+        this.noResultsRetryBtn.addEventListener('click', () => {
+            this.hideState('noResults');
+            this.searchInput.focus();
+        });
+        
+        this.errorRetryBtn.addEventListener('click', () => {
+            this.hideState('error');
+            this.handleSearch(); // Retry the search
+        });
+        
+        this.errorCancelBtn.addEventListener('click', () => {
+            this.hideState('error');
+            // Optionally reset to default state
+            this.showState('weather');
         });
         
         // Close dropdown when clicking outside
@@ -535,11 +555,124 @@ class SearchDropdown {
             }
         });
         
-        // Keyboard navigation
-        this.searchInput.addEventListener('keydown', (e) => {
-            this.handleKeyboard(e);
+        // Set default suggestions
+        this.showDefaultSuggestions();
+    } 
+    
+    
+    // ===== STATE MANAGEMENT =====
+    
+    showState(state) {
+        // Hide all states first
+        this.hideAllStates();
+        
+        switch(state) {
+            case 'progress':
+                this.searchProgress.classList.add('active');
+                break;
+            case 'noResults':
+                this.noResultsState.classList.add('active');
+                // Hide weather content but keep search visible
+                document.querySelector('.weather-container').style.display = 'none';
+                document.querySelector('.daily-forecast').style.display = 'none';
+                document.querySelector('.hourly-forecast').style.display = 'none';
+                break;
+            case 'error':
+                this.errorState.classList.add('active');
+                // Hide EVERYTHING except header
+                document.querySelector('.weather-container').style.display = 'none';
+                document.querySelector('.daily-forecast').style.display = 'none';
+                document.querySelector('.hourly-forecast').style.display = 'none';
+                document.querySelector('.search-container').style.display = 'none';
+                document.querySelector('.main-title').style.display = 'none';
+                document.querySelector('.no-results-state').style.display = 'none';
+                break;
+            case 'weather':
+                // Show everything (normal state)
+                this.noResultsState.classList.remove('active');
+                this.errorState.classList.remove('active');
+                document.querySelector('.weather-container').style.display = 'flex';
+                document.querySelector('.daily-forecast').style.display = 'block';
+                document.querySelector('.hourly-forecast').style.display = 'block';
+                document.querySelector('.search-container').style.display = 'flex';
+                document.querySelector('.main-title').style.display = 'block';
+                break;
+        }
+    }
+    
+   
+    
+    hideState(state) {
+        switch(state) {
+            case 'progress':
+                this.searchProgress.classList.remove('active');
+                break;
+            case 'noResults':
+                this.noResultsState.classList.remove('active');
+                break;
+            case 'error':
+                this.errorState.classList.remove('active');
+                // Restore normal view
+                this.showState('weather');
+                break;
+        }
+    }
+    
+    hideAllStates() {
+        this.searchProgress.classList.remove('active');
+        this.noResultsState.classList.remove('active');
+        this.errorState.classList.remove('active');
+    }
+    
+    // ===== SEARCH FUNCTIONALITY =====
+    
+    async handleSearch() {
+        const searchTerm = this.searchInput.value.trim();
+        
+        if (!searchTerm) {
+            this.searchInput.focus();
+            return;
+        }
+        
+        // Show progress state (under input)
+        this.showState('progress');
+        this.hideDropdown();
+        
+        try {
+            // Simulate API call
+            await this.simulateAPICall(searchTerm);
+            
+            // For demo - randomly show results or no results
+            const hasResults = Math.random() > 0.5; // 50% chance of results
+            
+            if (hasResults) {
+                this.hideAllStates();
+                this.showSearchResults(this.getMockResults(searchTerm));
+            } else {
+                this.showState('noResults');
+            }
+            
+        } catch (error) {
+            // Show error state (full page)
+            this.showState('error');
+            console.error('Search error:', error);
+        }
+    }
+    
+    simulateAPICall(searchTerm) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Simulate occasional errors
+                if (Math.random() < 0.2) {
+                    reject(new Error('API connection failed'));
+                } else {
+                    resolve();
+                }
+            }, 2000);
         });
     }
+    
+    // ===== DROPDOWN MANAGEMENT =====
     
     showDropdown() {
         this.searchDropdown.classList.add('active');
@@ -552,116 +685,51 @@ class SearchDropdown {
     handleInput(searchTerm) {
         if (searchTerm.length > 0) {
             this.showDropdown();
-            
-            // For now, just filter the existing dummy data
-            // Later, this will make API calls
             this.filterSuggestions(searchTerm);
-            
-            // Simulate API call delay (remove this in production)
-            console.log('Searching for:', searchTerm);
-            
         } else {
-            // Show default suggestions when input is empty
             this.showDefaultSuggestions();
         }
     }
     
-    filterSuggestions(searchTerm) {
-        const items = this.searchDropdown.querySelectorAll('.dropdown-item');
-        const searchLower = searchTerm.toLowerCase();
-        let hasVisibleItems = false;
-        
-        items.forEach(item => {
-            const cityName = item.querySelector('.city-name').textContent.toLowerCase();
-            if (cityName.includes(searchLower)) {
-                item.style.display = 'flex';
-                hasVisibleItems = true;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        
-        // Show no results message if no items match
-        this.toggleNoResults(!hasVisibleItems);
-    }
-    
     showDefaultSuggestions() {
-        const items = this.searchDropdown.querySelectorAll('.dropdown-item');
-        items.forEach(item => {
-            item.style.display = 'flex';
-        });
-        this.toggleNoResults(false);
+        const defaultCities = [
+            { name: 'Berlin', country: 'Germany' },
+            { name: 'Paris', country: 'France' },
+            { name: 'London', country: 'United Kingdom' },
+            { name: 'Madrid', country: 'Spain' }
+        ];
+        this.updateDropdownItems(defaultCities);
     }
     
-    toggleNoResults(show) {
-        let noResults = this.searchDropdown.querySelector('.no-results');
+    filterSuggestions(searchTerm) {
+        const defaultCities = [
+            { name: 'Berlin', country: 'Germany' },
+            { name: 'Paris', country: 'France' },
+            { name: 'London', country: 'United Kingdom' },
+            { name: 'Madrid', country: 'Spain' }
+        ];
         
-        if (show && !noResults) {
-            noResults = document.createElement('div');
-            noResults.className = 'no-results';
-            noResults.textContent = 'No cities found';
-            this.searchDropdown.appendChild(noResults);
-        } else if (!show && noResults) {
-            noResults.remove();
-        }
-    }
-    
-    selectCity(item) {
-        const cityName = item.querySelector('.city-name').textContent;
-        this.searchInput.value = cityName;
-        this.hideDropdown();
-        
-        // Dispatch event for city selection (for future API integration)
-        this.searchForm.dispatchEvent(new CustomEvent('citySelect', {
-            detail: { 
-                city: cityName
-            }
-        }));
-        
-        console.log('Selected city:', cityName);
-    }
-    
-    handleSearch() {
-        const searchTerm = this.searchInput.value.trim();
-        if (searchTerm) {
-            // Dispatch event for search (for future API integration)
-            this.searchForm.dispatchEvent(new CustomEvent('citySearch', {
-                detail: { 
-                    query: searchTerm
-                }
-            }));
-            
-            console.log('Searching for city:', searchTerm);
-            this.hideDropdown();
-        }
-    }
-    
-    handleKeyboard(e) {
-        const visibleItems = Array.from(this.dropdownItems).filter(item => 
-            item.style.display !== 'none'
+        const filtered = defaultCities.filter(city => 
+            city.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         
-        if (e.key === 'ArrowDown' && visibleItems.length > 0) {
-            e.preventDefault();
-            // Add keyboard navigation logic here
-        } else if (e.key === 'Escape') {
-            this.hideDropdown();
+        if (filtered.length === 0) {
+            this.showNoResultsInDropdown();
+        } else {
+            this.updateDropdownItems(filtered);
         }
     }
     
-    // Method to update suggestions (for future API integration)
-    updateSuggestions(cities) {
-        const dropdown = this.searchDropdown;
-        dropdown.innerHTML = ''; // Clear existing items
-        
-        if (cities.length === 0) {
-            const noResults = document.createElement('div');
-            noResults.className = 'no-results';
-            noResults.textContent = 'No cities found';
-            dropdown.appendChild(noResults);
-            return;
-        }
-        
+    showNoResultsInDropdown() {
+        this.searchDropdown.innerHTML = `
+            <div class="dropdown-item no-results-dropdown">
+                <span>No results found</span>
+            </div>
+        `;
+    }
+    
+    updateDropdownItems(cities) {
+        this.searchDropdown.innerHTML = '';
         cities.forEach(city => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
@@ -671,31 +739,34 @@ class SearchDropdown {
                 </svg>
                 <span class="city-name">${city.name}, ${city.country}</span>
             `;
-            
             item.addEventListener('click', () => {
-                this.selectCity(item);
+                this.selectCity(city);
             });
-            
-            dropdown.appendChild(item);
+            this.searchDropdown.appendChild(item);
         });
-        
-        this.dropdownItems = dropdown.querySelectorAll('.dropdown-item');
+    }
+    
+    showSearchResults(cities) {
+        console.log('Search results:', cities);
+        // In real app, update weather display here
+        alert(`Found ${cities.length} results!`);
+    }
+    
+    selectCity(city) {
+        this.searchInput.value = `${city.name}, ${city.country}`;
+        this.hideDropdown();
+        console.log('Selected city:', city);
+    }
+    
+    getMockResults(searchTerm) {
+        return [
+            { name: searchTerm, country: 'Country' },
+            { name: `${searchTerm} City`, country: 'Nation' }
+        ];
     }
 }
 
-// Initialize search dropdown when DOM is loaded
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    const searchDropdown = new SearchDropdown();
-    
-    // Listen for city selection (for future API integration)
-    document.getElementById('search-form').addEventListener('citySelect', function(e) {
-        console.log('City selected:', e.detail.city);
-        // When API is integrated: fetchWeatherData(e.detail.city);
-    });
-    
-    // Listen for search (for future API integration)
-    document.getElementById('search-form').addEventListener('citySearch', function(e) {
-        console.log('Search query:', e.detail.query);
-        // When API is integrated: searchCities(e.detail.query);
-    });
+    new SearchDropdown();
 });
