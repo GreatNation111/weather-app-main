@@ -2395,3 +2395,44 @@ footer {
         height: 40px;
     }
 }
+
+/* ===== PWA INSTALL BUTTON ===== */
+.install-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.install-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+}
+
+.install-btn.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hide install button when app is already installed */
+@media (display-mode: standalone) {
+    .install-btn {
+        display: none !important;
+    }
+}

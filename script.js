@@ -1571,6 +1571,167 @@ class ThemeManager {
         }
     }
 }
+
+// ===== PWA MANAGER =====
+class PWAManager {
+    constructor() {
+        this.deferredPrompt = null;
+        this.installButton = null;
+        
+        this.init();
+    }
+    
+    init() {
+        // Register service worker
+        this.registerServiceWorker();
+        
+        // Listen for install prompt
+        this.listenForInstallPrompt();
+        
+        // Create install button
+        this.createInstallButton();
+        
+        console.log('PWA Manager initialized');
+    }
+    
+    registerServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered:', registration);
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('Service Worker update found:', newWorker);
+                    });
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    }
+    
+    listenForInstallPrompt() {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            this.deferredPrompt = e;
+            // Show install button
+            this.showInstallButton();
+            console.log('PWA install prompt available');
+        });
+        
+        // Listen for app installation
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA was installed');
+            this.hideInstallButton();
+            this.deferredPrompt = null;
+        });
+    }
+    
+    createInstallButton() {
+        const button = document.createElement('button');
+        button.id = 'install-btn';
+        button.className = 'install-btn';
+        button.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Install App
+        `;
+        button.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 10000;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        `;
+        
+        button.addEventListener('click', () => this.installApp());
+        button.addEventListener('mouseenter', () => {
+            button.style.transform = 'translateY(-2px)';
+            button.style.boxShadow = '0 6px 25px rgba(0,0,0,0.4)';
+        });
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translateY(0)';
+            button.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+        });
+        
+        document.body.appendChild(button);
+        this.installButton = button;
+    }
+    
+    showInstallButton() {
+        if (this.installButton) {
+            this.installButton.style.opacity = '1';
+            this.installButton.style.transform = 'translateY(0)';
+        }
+    }
+    
+    hideInstallButton() {
+        if (this.installButton) {
+            this.installButton.style.opacity = '0';
+            this.installButton.style.transform = 'translateY(20px)';
+        }
+    }
+    
+    async installApp() {
+        if (!this.deferredPrompt) {
+            return;
+        }
+        
+        // Show the install prompt
+        this.deferredPrompt.prompt();
+        
+        // Wait for the user to respond to the prompt
+        const { outcome } = await this.deferredPrompt.userChoice;
+        
+        if (outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+        } else {
+            console.log('User dismissed the install prompt');
+        }
+        
+        // Clear the saved prompt since it can't be used again
+        this.deferredPrompt = null;
+        this.hideInstallButton();
+    }
+    
+    // Check if app is running in standalone mode
+    isRunningStandalone() {
+        return window.matchMedia('(display-mode: standalone)').matches || 
+               window.navigator.standalone ||
+               document.referrer.includes('android-app://');
+    }
+    
+    // Get current display mode
+    getDisplayMode() {
+        if (this.isRunningStandalone()) {
+            return 'standalone';
+        }
+        if (window.matchMedia('(display-mode: fullscreen)').matches) {
+            return 'fullscreen';
+        }
+        return 'browser';
+    }
+}
 // In the DOMContentLoaded event listener - UPDATE the initialization:
 document.addEventListener('DOMContentLoaded', function() {
     const loadingSkeleton = document.getElementById('loading-skeleton');
@@ -1580,6 +1741,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchDropdown = new SearchDropdown();
     const daySelector = new DaySelector('day-selector');
     const themeManager = new ThemeManager(); 
+
+    const pwaManager = new PWAManager(); // NEW
+    
      window.searchDropdown = searchDropdown;
     
       // FIX: Make sure day selector event is properly connected
