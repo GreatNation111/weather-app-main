@@ -3,10 +3,18 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
+body, html {
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100%;
+  
+}
 html {
-  font-size: 18px; /* As per style guide */
+  font-size: 18px;
+  height: 100%; /* As per style guide */
 }
 
 body {
@@ -17,6 +25,9 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -25,8 +36,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: -1 !important;
     overflow: hidden;
     transition: all 2s ease-in-out;
@@ -727,6 +738,7 @@ main {
   width: 100%;
   max-width: 1200px;
   margin: 2rem auto;
+  flex: 1;
 }
 
 .header, main, .main-title, .search-container, 
@@ -914,6 +926,7 @@ body *:not(.custom-dropdown):not(.loading-skeleton):not(.dropdown-menu):not(.sea
     line-height: normal;
     padding: 2rem;
     margin-top: 0.5rem;
+    width: 100%;
     text-align: center;
     font-size: 3rem;
 
@@ -1115,6 +1128,7 @@ button:focus {
     flex-direction: column;
     gap: 0.8rem;
     padding: 1rem;
+    width: 100%;
   }
   
   .search-bar input{
@@ -1711,14 +1725,15 @@ button:focus {
 .forecast-cards {
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
+  gap: 3px;
   flex-wrap: wrap;
 }
 
 .daily-forecast .forecast-card{
   padding:12px 8px;
+  margin-top: 1rem;
   min-height:120px; 
-  width:116px ;
+  width:110px ;
   gap: 1.5rem;
 }
 
@@ -1935,7 +1950,7 @@ button:focus {
   }
 
   .hourly-forecast{
-     padding-right: 0.5rem;
+     padding-right: 2rem;
      
   }
   
