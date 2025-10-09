@@ -607,14 +607,14 @@ body {
   .skeleton-forecast-cards{
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
+    gap: 3px;
     flex-wrap: wrap;
   }
 
   .skeleton-forecast-card {
     padding: 12px 8px;
     min-height: 120px;
-    width: 116px;
+    width: 110px;
     gap: 1.5rem;
   }
 
@@ -717,7 +717,7 @@ body {
 @media (max-width: 768px) {
 
   .skeleton-hourly-forecast{
-    padding-right: 0.5rem;
+    padding-right: 2rem;
   }
 
   .skeleton-forecast-header{

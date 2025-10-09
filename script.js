@@ -343,7 +343,7 @@ async getSunriseSunsetData(latitude, longitude) {
     
    
 
-// Also UPDATE the getWeatherData method to include sunrise/sunset:
+//  UPDATED the getWeatherData method to include sunrise/sunset:
 async getWeatherData(latitude, longitude) {
     try {
         const response = await fetch(
@@ -420,14 +420,15 @@ class SearchDropdown {
     
         this.weatherAPI = new WeatherAPI();
         
-     this.backgroundManager = null;
-    try {
-        this.backgroundManager = new BackgroundManager();
-        console.log('✅ BackgroundManager initialized successfully');
-    } catch (error) {
-        console.error('❌ BackgroundManager initialization failed:', error);
-        // Don't break the app - continue without background manager
-    }
+            // FIX: Better error handling for BackgroundManager initialization
+try {
+    this.backgroundManager = new BackgroundManager();
+    console.log('✅ BackgroundManager initialized successfully');
+} catch (error) {
+    console.error('❌ BackgroundManager initialization failed:', error);
+    // Create a proper fallback
+    this.backgroundManager = this.createFallbackBackgroundManager();
+}
         
         // FIX: Store current weather data for unit conversions
         this.currentWeatherData = null;
@@ -1214,7 +1215,7 @@ function detectUserLocation() {
 
 }
 
-// REPLACE the enhancedReverseGeocoding function with this improved version:
+// enhancedReverseGeocoding
 async function enhancedReverseGeocoding(latitude, longitude) {
     console.log('Geocoding coordinates:', latitude, longitude);
     
