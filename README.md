@@ -82,5 +82,5 @@ Throughout the build, I tested responsiveness manually and refined details like 
 
 ---
 
-📍 **Live Project:** [Weather Sky](https://greatnation111.github.io/weather-app-main/)  
+📍 **Live Project:** [WeatherNow](https://greatnation111.github.io/weather-app-main/)  
 🛠️ Built with ❤️ by **Great Nation**
