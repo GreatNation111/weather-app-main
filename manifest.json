@@ -1,11 +1,11 @@
 {
-  "name": "Weather Sky",
-  "short_name": "WeatherSky",
+  "name": "WeatherNow",
+  "short_name": "WeatherNow",
   "description": "Beautiful weather forecast app with real-time data",
   "start_url": "/weather-app-main/",
   "display": "standalone",
   "background_color": "#0a0a1a",
-  "theme_color": "#4a56e2",
+  "theme_color":  "#0a0a1a",
   "orientation": "portrait-primary",
   "scope": "/weather-app-main/",
   "lang": "en",
@@ -59,7 +59,7 @@
     {
       "src": "/weather-app-main/assets/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any maskable"
     },
     {
@@ -71,7 +71,7 @@
     {
       "src": "/weather-app-main/assets/icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/webp",
       "purpose": "any maskable"
     }
   ]

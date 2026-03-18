@@ -340,7 +340,6 @@ async getSunriseSunsetData(latitude, longitude) {
     }
     
    
-
 async getWeatherData(latitude, longitude) {
     try {
         const response = await fetch(
