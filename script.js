@@ -297,14 +297,12 @@ class DaySelector {
     }
 }
 
-// OpenMeteo API Service - Add this NEW class
 class WeatherAPI {
     constructor() {
         this.baseUrl = 'https://api.open-meteo.com/v1';
         this.geocodingUrl = 'https://geocoding-api.open-meteo.com/v1';
     }
     
-   // In WeatherAPI class - ADD this method:
 async getSunriseSunsetData(latitude, longitude) {
     try {
         const response = await fetch(
@@ -343,7 +341,6 @@ async getSunriseSunsetData(latitude, longitude) {
     
    
 
-// Also UPDATE the getWeatherData method to include sunrise/sunset:
 async getWeatherData(latitude, longitude) {
     try {
         const response = await fetch(
@@ -402,7 +399,6 @@ async getWeatherData(latitude, longitude) {
     }
 }
 
-// ===== FIXED SearchDropdown Class =====
 class SearchDropdown {
     constructor() {
         this.searchInput = document.getElementById('search-input');
@@ -420,16 +416,15 @@ class SearchDropdown {
     
         this.weatherAPI = new WeatherAPI();
         
-     this.backgroundManager = null;
-    try {
-        this.backgroundManager = new BackgroundManager();
-        console.log('✅ BackgroundManager initialized successfully');
-    } catch (error) {
-        console.error('❌ BackgroundManager initialization failed:', error);
-        // Don't break the app - continue without background manager
-    }
+try {
+    this.backgroundManager = new BackgroundManager();
+    console.log('✅ BackgroundManager initialized successfully');
+} catch (error) {
+    console.error('❌ BackgroundManager initialization failed:', error);
+    // Create a proper fallback
+    this.backgroundManager = this.createFallbackBackgroundManager();
+}
         
-        // FIX: Store current weather data for unit conversions
         this.currentWeatherData = null;
         this.currentLocation = null;
         
@@ -683,14 +678,12 @@ createFallbackBackgroundManager() {
         }
     }
 
-// In SearchDropdown class - UPDATE the updateWeatherUI method:
 updateWeatherUI(weatherData, location) {
     const current = weatherData.current;
     const daily = weatherData.daily;
     
     console.log('Updating UI with real data:', current);
     
-    // Update current weather with REAL data
     document.getElementById('city').textContent = `${location.name}, ${location.country}`;
     document.getElementById('temperature').textContent = `${Math.round(current.temperature_2m)}°`;
     document.getElementById('feels-like').textContent = `${Math.round(current.apparent_temperature)}°`;
@@ -698,13 +691,11 @@ updateWeatherUI(weatherData, location) {
     document.getElementById('wind').textContent = `${Math.round(current.wind_speed_10m)} km/h`;
     document.getElementById('precipitation').textContent = `${current.precipitation || 0} mm`;
     
-    // Update weather icon with REAL data
     const weatherIcon = document.getElementById('weather-icon');
     const iconFile = this.weatherAPI.getWeatherIcon(current.weather_code);
     weatherIcon.src = `assets/images/${iconFile}`;
     weatherIcon.alt = this.weatherAPI.getWeatherDescription(current.weather_code);
     
-    // Update date with REAL data
     const currentDate = new Date(current.time);
     document.getElementById('date').textContent = currentDate.toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -713,19 +704,16 @@ updateWeatherUI(weatherData, location) {
         day: 'numeric' 
     });
     
-    // Update daily forecast with REAL data
     if (daily && daily.time.length > 0) {
         this.updateDailyForecast(daily);
     }
     
-    // FIX: Update sunrise/sunset times immediately
     if (daily && daily.sunrise && daily.sunset) {
         this.updateSunTimes(daily, current.time);
     }
     
  
     
-    // FIX: Update background with real data (with better error handling)
    if (daily && daily.sunrise && daily.sunset && this.backgroundManager) {
     try {
         const isDaytime = this.backgroundManager.isDaytime(
@@ -780,7 +768,6 @@ updateWeatherUI(weatherData, location) {
         });
     }
 
-    // FIXED: Unit conversion using stored real data
     convertUnits(system) {
         if (!this.currentWeatherData) {
             console.log('No weather data available for conversion');
@@ -859,8 +846,7 @@ updateWeatherUI(weatherData, location) {
         hourlyData.time.forEach((timestamp, index) => {
             const date = new Date(timestamp);
             const dayKey = date.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                timeZone: 'UTC' 
+                weekday: 'long'
             }).toLowerCase();
             
             if (!dailyData[dayKey]) {
@@ -913,7 +899,6 @@ updateWeatherUI(weatherData, location) {
         });
     }
 
-    // ===== SUNRISE/SUNSET FIXES =====
 updateSunTimes(sunData, currentTime) {
     if (!sunData || !sunData.sunrise || !sunData.sunset || !sunData.sunrise[0] || !sunData.sunset[0]) {
         console.log('No valid sunrise/sunset data available:', sunData);
@@ -949,7 +934,6 @@ updateSunTimes(sunData, currentTime) {
     formatTime(isoString) {
         const date = new Date(isoString);
         return date.toLocaleTimeString('en-US', {
-            timeZone: 'UTC',
             hour: 'numeric',
             minute: '2-digit',
             hour12: true
@@ -962,7 +946,6 @@ updateSunTimes(sunData, currentTime) {
         
         const apiTime = new Date(currentTimeIso);
         const apiTimeString = apiTime.toLocaleTimeString('en-US', {
-            timeZone: 'UTC',
             hour: 'numeric',
             minute: '2-digit',
             hour12: true
@@ -1092,7 +1075,6 @@ updateSunTimes(sunData, currentTime) {
         }
     }
 
-// UPDATE showMockWeather method:
 showMockWeather(city) {
     document.getElementById('city').textContent = `${city.name}, ${city.country}`;
     document.getElementById('temperature').textContent = '20°';
@@ -1113,7 +1095,6 @@ showMockWeather(city) {
     
     document.getElementById('progress-time').textContent = 'Daylight: 6h 15m remaining';
     
-    // FIX: Set default background with error handling
     if (this.backgroundManager) {
         try {
             this.backgroundManager.updateBackground(0, true, new Date());
@@ -1126,7 +1107,6 @@ showMockWeather(city) {
 }
 
 get searchContainer() {
-    // FIX: Return the actual search container element
     const container = document.querySelector('.search-container');
     if (!container) {
         console.warn('Search container not found');
@@ -1138,7 +1118,6 @@ get searchContainer() {
 }
 
 
-// ENHANCED: Location Detection Function
 function detectUserLocation() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
@@ -1214,7 +1193,7 @@ function detectUserLocation() {
 
 }
 
-// REPLACE the enhancedReverseGeocoding function with this improved version:
+// enhancedReverseGeocoding
 async function enhancedReverseGeocoding(latitude, longitude) {
     console.log('Geocoding coordinates:', latitude, longitude);
     
@@ -1303,7 +1282,6 @@ async function enhancedReverseGeocoding(latitude, longitude) {
     };
 }
 
-// ADD this function to clear cached locations:
 function clearLocationCache() {
     try {
         localStorage.removeItem('weatherApp_userLocation');
@@ -1362,7 +1340,6 @@ function getLastSearchedLocation() {
     }
 }
 
-// ===== SIMPLIFIED Background Manager Class =====
 class BackgroundManager {
     constructor() {
         console.log('Initializing BackgroundManager...');
